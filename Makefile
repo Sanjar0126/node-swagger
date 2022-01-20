@@ -14,11 +14,11 @@ include .build_info
 
 
 build-image:
-	docker build --rm -t ${REGISTRY}/${PROJECT_NAME}/${APP}/${IMG_NAME}:${TAG} .
-	docker tag ${REGISTRY}/${PROJECT_NAME}/${APP}/${IMG_NAME}:${TAG} ${REGISTRY}/${PROJECT_NAME}/${APP}/${IMG_NAME}:${ENV_TAG}
+	docker build --rm -t ${REGISTRY}/${PROJECT_NAME}/${IMG_NAME}:${TAG} .
+	docker tag ${REGISTRY}/${PROJECT_NAME}/${IMG_NAME}:${TAG} ${REGISTRY}/${PROJECT_NAME}/${IMG_NAME}:${ENV_TAG}
 
 push-image:
-	docker push ${REGISTRY}/${PROJECT_NAME}/${APP}/${IMG_NAME}:${TAG}
-	docker push ${REGISTRY}/${PROJECT_NAME}/${APP}/${IMG_NAME}:${ENV_TAG}
+	docker push ${REGISTRY}/${PROJECT_NAME}/${IMG_NAME}:${TAG}
+	docker push ${REGISTRY}/${PROJECT_NAME}/${IMG_NAME}:${ENV_TAG}
 
 
