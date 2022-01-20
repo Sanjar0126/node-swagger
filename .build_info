@@ -1,0 +1,4 @@
+REGISTRY=registry.gitlab.com:5050
+PROJECT_NAME=odoo
+APP=node_swagger
+
