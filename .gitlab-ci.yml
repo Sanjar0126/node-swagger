@@ -32,7 +32,7 @@ deploy-prod:
   script:
     - ssh -o StrictHostKeyChecking=no $SSH_CONNECT 'docker service update --with-registry-auth 
       --image '$CI_REGISTRY'/'$CI_PROJECT_NAMESPACE'/'$CI_PROJECT_NAME'/'$CI_PROJECT_NAME':'$CI_PIPELINE_IID' '$CI_PROJECT_NAME''
-  only
+  only:
     - master
   tags:
     - deploy
