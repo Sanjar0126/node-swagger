@@ -1,0 +1,994 @@
+openapi: 3.0.2
+info:
+  title: Odoo
+  description: A minimal API
+  version: 1.0.0
+servers:
+- url: http://localhost:8069/custom-api
+  description: Local server
+- url: https://odoo.voxe.tv/custom-api
+  description: Server
+tags:
+- name: product
+- name: order
+- name: payment
+paths:
+  /product.product:
+    get:
+      tags:
+      - product
+      description: endpoint for obtaining product list
+      operationId: product_productGET
+      parameters:
+      - name: name
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: endpoint for obtaining product list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+      x-swagger-router-controller: Product
+  /product.product/{id}:
+    get:
+      tags:
+      - product
+      description: endpoint for obtaining product detail
+      operationId: product_productIdGET
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: endpoint for obtaining product detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+      x-swagger-router-controller: Product
+  /order:
+    post:
+      tags:
+      - order
+      description: endpoint for creating order
+      operationId: orderPOST
+      requestBody:
+        description: endpoint for creating order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+      responses:
+        "200":
+          description: endpoint for creating order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderCreateResponse'
+      x-swagger-router-controller: Order
+  /order/{id}:
+    get:
+      tags:
+      - order
+      description: endpoint for retrieving order
+      operationId: orderIdGET
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: endpoint for retrieving order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+      x-swagger-router-controller: Order
+    patch:
+      tags:
+      - order
+      description: endpoint for updating order
+      operationId: orderIdPATCH
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        description: endpoint for updating order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+      responses:
+        "200":
+          description: endpoint for updating order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+      x-swagger-router-controller: Order
+  /order/:
+    get:
+      tags:
+      - order
+      description: endpoint for retrieving order
+      operationId: orderGET
+      requestBody:
+        description: endpoint for retrieving order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListParameterReq'
+      responses:
+        "200":
+          description: endpoint for retrieving order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+      x-swagger-router-controller: Order
+  /payme/add-card:
+    post:
+      tags:
+      - payment
+      description: endpoint for Add new card
+      operationId: paymeAdd_cardPOST
+      requestBody:
+        description: endpoint for Add new card
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardCreate'
+      responses:
+        "200":
+          description: endpoint for Add new card
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+      x-swagger-router-controller: Payment
+  /payme/verify:
+    post:
+      tags:
+      - payment
+      description: endpoint for verifying new card
+      operationId: paymeVerifyPOST
+      requestBody:
+        description: body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyCardReq'
+      responses:
+        "200":
+          description: endpoint for verifying new card
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+      x-swagger-router-controller: Payment
+  /payme/card-list:
+    post:
+      tags:
+      - payment
+      description: endpoint for list cards
+      operationId: paymeCard_listPOST
+      responses:
+        "200":
+          description: endpoint for list cards
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardListResp'
+      x-swagger-router-controller: Payment
+  /payme/card-remove:
+    post:
+      tags:
+      - payment
+      description: endpoint for remove card
+      operationId: paymeCard_removePOST
+      requestBody:
+        description: body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyCardReq'
+      responses:
+        "200":
+          description: endpoint for remove card
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+      x-swagger-router-controller: Payment
+  /payme/receipt:
+    post:
+      tags:
+      - payment
+      description: endpoint for create receipt
+      operationId: paymeReceiptPOST
+      requestBody:
+        description: body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReceiptRequest'
+      responses:
+        "200":
+          description: endpoint for create receipt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceiptResponse'
+      x-swagger-router-controller: Payment
+  /payme/receipt-pay:
+    post:
+      tags:
+      - payment
+      description: endpoint for pay receipt
+      operationId: paymeReceipt_payPOST
+      requestBody:
+        description: body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiptPayReq'
+      responses:
+        "200":
+          description: endpoint for pay receipt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+      x-swagger-router-controller: Payment
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        complete_name:
+          type: string
+        id:
+          type: integer
+        name:
+          type: string
+      example:
+        complete_name: complete_name
+        name: name
+        id: 6
+    Product:
+      type: object
+      properties:
+        purchase_ok:
+          type: boolean
+        name:
+          type: string
+        type:
+          type: string
+        active:
+          type: boolean
+        description_sale:
+          type: string
+        id:
+          type: integer
+        images:
+          type: array
+          items:
+            type: string
+        website_description:
+          type: string
+        sale_ok:
+          type: boolean
+        default_code:
+          type: string
+        category:
+          $ref: '#/components/schemas/Category'
+        is_published:
+          type: boolean
+        list_price:
+          type: number
+        detailed_type:
+          type: string
+      example:
+        images:
+        - images
+        - images
+        purchase_ok: true
+        is_published: true
+        sale_ok: true
+        active: true
+        list_price: 1.46581298050294517310021547018550336360931396484375
+        type: type
+        description_sale: description_sale
+        name: name
+        website_description: website_description
+        id: 0
+        category:
+          complete_name: complete_name
+          name: name
+          id: 6
+        detailed_type: detailed_type
+        default_code: default_code
+    ProductList:
+      type: object
+      properties:
+        products:
+          $ref: '#/components/schemas/Product'
+        count:
+          type: integer
+        page:
+          type: integer
+      example:
+        count: 5
+        page: 5
+        products:
+          images:
+          - images
+          - images
+          purchase_ok: true
+          is_published: true
+          sale_ok: true
+          active: true
+          list_price: 1.46581298050294517310021547018550336360931396484375
+          type: type
+          description_sale: description_sale
+          name: name
+          website_description: website_description
+          id: 0
+          category:
+            complete_name: complete_name
+            name: name
+            id: 6
+          detailed_type: detailed_type
+          default_code: default_code
+    OrderLineProducts:
+      type: object
+      properties:
+        name:
+          type: string
+        qty_delivered_method:
+          type: string
+        currency_id:
+          type: integer
+        invoice_status:
+          type: string
+        order_partner_id:
+          type: integer
+        product_uom_qty:
+          type: number
+        product_id:
+          type: integer
+      example:
+        qty_delivered_method: qty_delivered_method
+        order_partner_id: 9
+        product_id: 2
+        name: name
+        currency_id: 7
+        product_uom_qty: 3.61607674925191080461672754609026014804840087890625
+        invoice_status: invoice_status
+    OrderCreateResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        state:
+          type: string
+        partner_shipping_id:
+          type: integer
+        access_token:
+          type: string
+        id:
+          type: integer
+        currency_id:
+          type: integer
+        partner_id:
+          type: integer
+        website_id:
+          type: integer
+        partner_invoice_id:
+          type: integer
+        orderline:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineProducts'
+        user_id:
+          type: integer
+        note:
+          type: string
+        reference:
+          type: string
+      example:
+        note: note
+        access_token: access_token
+        reference: reference
+        orderline:
+        - qty_delivered_method: qty_delivered_method
+          order_partner_id: 9
+          product_id: 2
+          name: name
+          currency_id: 7
+          product_uom_qty: 3.61607674925191080461672754609026014804840087890625
+          invoice_status: invoice_status
+        - qty_delivered_method: qty_delivered_method
+          order_partner_id: 9
+          product_id: 2
+          name: name
+          currency_id: 7
+          product_uom_qty: 3.61607674925191080461672754609026014804840087890625
+          invoice_status: invoice_status
+        partner_id: 5
+        user_id: 4
+        name: name
+        partner_invoice_id: 2
+        state: state
+        id: 6
+        partner_shipping_id: 0
+        website_id: 5
+        currency_id: 1
+    OrderProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+        quantity:
+          type: integer
+    OrderCreateParams:
+      type: object
+      properties:
+        state:
+          type: string
+          enum:
+          - draft
+          - sent
+          - sale
+          - cancel
+        products:
+          $ref: '#/components/schemas/OrderProduct'
+        note:
+          type: string
+    OrderCreate:
+      type: object
+      properties:
+        params:
+          $ref: '#/components/schemas/OrderCreateParams'
+        id:
+          type: integer
+    Customer:
+      type: object
+      properties:
+        name:
+          type: string
+        city:
+          type: string
+        active:
+          type: boolean
+        email:
+          type: string
+        id:
+          type: integer
+        is_company:
+          type: boolean
+        website:
+          type: string
+        street:
+          type: string
+        phone:
+          type: string
+        function:
+          type: string
+        zip:
+          type: string
+        display_name:
+          type: string
+        commercial_company_name:
+          type: string
+      example:
+        zip: zip
+        website: website
+        city: city
+        active: true
+        display_name: display_name
+        phone: phone
+        street: street
+        function: function
+        commercial_company_name: commercial_company_name
+        name: name
+        id: 0
+        is_company: true
+        email: email
+    OrderLine:
+      type: object
+      properties:
+        price_tax:
+          type: number
+        name:
+          type: string
+        price_total:
+          type: number
+        state:
+          type: string
+        create_date:
+          type: string
+        id:
+          type: integer
+        qty_delivered_method:
+          type: string
+        price_unit:
+          type: number
+        quantity:
+          type: number
+        price_subtotal:
+          type: number
+        qty_delivered:
+          type: number
+      example:
+        price_unit: 5.63737665663332876420099637471139430999755859375
+        qty_delivered_method: qty_delivered_method
+        quantity: 2.3021358869347654518833223846741020679473876953125
+        price_tax: 6.02745618307040320615897144307382404804229736328125
+        price_subtotal: 7.061401241503109105224211816675961017608642578125
+        qty_delivered: 9.301444243932575517419536481611430644989013671875
+        name: name
+        state: state
+        id: 5
+        create_date: create_date
+        price_total: 1.46581298050294517310021547018550336360931396484375
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        login:
+          type: string
+        active:
+          type: boolean
+      example:
+        active: true
+        id: 2
+        login: login
+    Currency:
+      type: object
+      properties:
+        name:
+          type: string
+        symbol:
+          type: string
+        id:
+          type: integer
+        currency_unit_label:
+          type: string
+        full_name:
+          type: string
+      example:
+        symbol: symbol
+        full_name: full_name
+        name: name
+        id: 1
+        currency_unit_label: currency_unit_label
+    OrderItem:
+      type: object
+      properties:
+        name:
+          type: string
+        state:
+          type: string
+        customer:
+          $ref: '#/components/schemas/Customer'
+        order_line:
+          $ref: '#/components/schemas/OrderLine'
+        id:
+          type: integer
+        user:
+          $ref: '#/components/schemas/User'
+        require_signature:
+          type: string
+        amount_untaxed:
+          type: number
+        amount_total:
+          type: number
+        currency_rate:
+          type: number
+        picking_policy:
+          type: string
+        currency:
+          $ref: '#/components/schemas/Currency'
+        date_order:
+          type: string
+        amount_tax:
+          type: number
+        note:
+          type: string
+        require_payment:
+          type: string
+      example:
+        note: note
+        require_signature: require_signature
+        require_payment: require_payment
+        amount_total: 7.3862819483858839220147274318151175975799560546875
+        currency_rate: 1.231513536777255612975068288506008684635162353515625
+        amount_tax: 1.489415909854170383397331534069962799549102783203125
+        amount_untaxed: 4.1456080298839363962315474054776132106781005859375
+        date_order: date_order
+        order_line:
+          price_unit: 5.63737665663332876420099637471139430999755859375
+          qty_delivered_method: qty_delivered_method
+          quantity: 2.3021358869347654518833223846741020679473876953125
+          price_tax: 6.02745618307040320615897144307382404804229736328125
+          price_subtotal: 7.061401241503109105224211816675961017608642578125
+          qty_delivered: 9.301444243932575517419536481611430644989013671875
+          name: name
+          state: state
+          id: 5
+          create_date: create_date
+          price_total: 1.46581298050294517310021547018550336360931396484375
+        name: name
+        currency:
+          symbol: symbol
+          full_name: full_name
+          name: name
+          id: 1
+          currency_unit_label: currency_unit_label
+        state: state
+        id: 3
+        user:
+          active: true
+          id: 2
+          login: login
+        picking_policy: picking_policy
+        customer:
+          zip: zip
+          website: website
+          city: city
+          active: true
+          display_name: display_name
+          phone: phone
+          street: street
+          function: function
+          commercial_company_name: commercial_company_name
+          name: name
+          id: 0
+          is_company: true
+          email: email
+    OrderList:
+      type: object
+      properties:
+        page:
+          type: integer
+        count:
+          type: integer
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+      example:
+        count: 6
+        orders:
+        - note: note
+          require_signature: require_signature
+          require_payment: require_payment
+          amount_total: 7.3862819483858839220147274318151175975799560546875
+          currency_rate: 1.231513536777255612975068288506008684635162353515625
+          amount_tax: 1.489415909854170383397331534069962799549102783203125
+          amount_untaxed: 4.1456080298839363962315474054776132106781005859375
+          date_order: date_order
+          order_line:
+            price_unit: 5.63737665663332876420099637471139430999755859375
+            qty_delivered_method: qty_delivered_method
+            quantity: 2.3021358869347654518833223846741020679473876953125
+            price_tax: 6.02745618307040320615897144307382404804229736328125
+            price_subtotal: 7.061401241503109105224211816675961017608642578125
+            qty_delivered: 9.301444243932575517419536481611430644989013671875
+            name: name
+            state: state
+            id: 5
+            create_date: create_date
+            price_total: 1.46581298050294517310021547018550336360931396484375
+          name: name
+          currency:
+            symbol: symbol
+            full_name: full_name
+            name: name
+            id: 1
+            currency_unit_label: currency_unit_label
+          state: state
+          id: 3
+          user:
+            active: true
+            id: 2
+            login: login
+          picking_policy: picking_policy
+          customer:
+            zip: zip
+            website: website
+            city: city
+            active: true
+            display_name: display_name
+            phone: phone
+            street: street
+            function: function
+            commercial_company_name: commercial_company_name
+            name: name
+            id: 0
+            is_company: true
+            email: email
+        - note: note
+          require_signature: require_signature
+          require_payment: require_payment
+          amount_total: 7.3862819483858839220147274318151175975799560546875
+          currency_rate: 1.231513536777255612975068288506008684635162353515625
+          amount_tax: 1.489415909854170383397331534069962799549102783203125
+          amount_untaxed: 4.1456080298839363962315474054776132106781005859375
+          date_order: date_order
+          order_line:
+            price_unit: 5.63737665663332876420099637471139430999755859375
+            qty_delivered_method: qty_delivered_method
+            quantity: 2.3021358869347654518833223846741020679473876953125
+            price_tax: 6.02745618307040320615897144307382404804229736328125
+            price_subtotal: 7.061401241503109105224211816675961017608642578125
+            qty_delivered: 9.301444243932575517419536481611430644989013671875
+            name: name
+            state: state
+            id: 5
+            create_date: create_date
+            price_total: 1.46581298050294517310021547018550336360931396484375
+          name: name
+          currency:
+            symbol: symbol
+            full_name: full_name
+            name: name
+            id: 1
+            currency_unit_label: currency_unit_label
+          state: state
+          id: 3
+          user:
+            active: true
+            id: 2
+            login: login
+          picking_policy: picking_policy
+          customer:
+            zip: zip
+            website: website
+            city: city
+            active: true
+            display_name: display_name
+            phone: phone
+            street: street
+            function: function
+            commercial_company_name: commercial_company_name
+            name: name
+            id: 0
+            is_company: true
+            email: email
+        page: 0
+    Card:
+      type: object
+      properties:
+        recurrent:
+          type: boolean
+        expire:
+          type: string
+        number:
+          type: string
+        owner_id:
+          type: integer
+        verify:
+          type: boolean
+        card_id:
+          type: integer
+        token:
+          type: string
+      example:
+        number: number
+        owner_id: 6
+        expire: expire
+        verify: true
+        recurrent: true
+        card_id: 1
+        token: token
+    CardResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        result:
+          $ref: '#/components/schemas/Card'
+      example:
+        result:
+          number: number
+          owner_id: 6
+          expire: expire
+          verify: true
+          recurrent: true
+          card_id: 1
+          token: token
+        id: 0
+    CardParams:
+      type: object
+      properties:
+        card_number:
+          type: string
+        card_expire:
+          type: string
+    CardCreate:
+      type: object
+      properties:
+        params:
+          $ref: '#/components/schemas/CardParams'
+        id:
+          type: integer
+    ListParameter:
+      type: object
+      properties:
+        name:
+          type: string
+        page:
+          type: integer
+        limit:
+          type: integer
+    ListParameterReq:
+      type: object
+      properties:
+        params:
+          $ref: '#/components/schemas/ListParameter'
+        id:
+          type: integer
+    VerifyCard:
+      type: object
+      properties:
+        code:
+          type: string
+        card_id:
+          type: integer
+      example:
+        code: code
+        card_id: 6
+    VerifyCardReq:
+      type: object
+      properties:
+        params:
+          $ref: '#/components/schemas/VerifyCard'
+        id:
+          type: integer
+      example:
+        id: 1
+        params:
+          code: code
+          card_id: 6
+    CardListResp:
+      type: object
+      properties:
+        id:
+          type: integer
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerifyCardReq'
+      example:
+        result:
+        - id: 1
+          params:
+            code: code
+            card_id: 6
+        - id: 1
+          params:
+            code: code
+            card_id: 6
+        id: 0
+    Receipt:
+      type: object
+      properties:
+        state:
+          type: integer
+        create_time:
+          type: string
+        cancel_time:
+          type: string
+        pay_time:
+          type: string
+        order_id:
+          type: integer
+        id:
+          type: integer
+        amount:
+          type: integer
+        external_id:
+          type: string
+        user_id:
+          type: integer
+      example:
+        cancel_time: cancel_time
+        amount: 5
+        create_time: create_time
+        user_id: 2
+        external_id: external_id
+        state: 6
+        id: 5
+        order_id: 1
+        pay_time: pay_time
+    ReceiptResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        result:
+          $ref: '#/components/schemas/Receipt'
+      example:
+        result:
+          cancel_time: cancel_time
+          amount: 5
+          create_time: create_time
+          user_id: 2
+          external_id: external_id
+          state: 6
+          id: 5
+          order_id: 1
+          pay_time: pay_time
+        id: 0
+    CreateReceiptParams:
+      type: object
+      properties:
+        amount:
+          type: integer
+        order_id:
+          type: integer
+    ReceiptPayParams:
+      type: object
+      properties:
+        card_id:
+          type: integer
+        receipt_id:
+          type: integer
+    ReceiptPayReq:
+      type: object
+      properties:
+        params:
+          $ref: '#/components/schemas/ReceiptPayParams'
+        id:
+          type: integer
+    Success:
+      type: object
+      properties:
+        success:
+          type: boolean
+      example:
+        success: true
+    CreateReceiptRequest:
+      type: object
+      properties:
+        params:
+          $ref: '#/components/schemas/CreateReceiptParams'
+        id:
+          type: integer
